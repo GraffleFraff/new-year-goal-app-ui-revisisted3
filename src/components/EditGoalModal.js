@@ -3,16 +3,15 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 const EditGoalModal = ({ show, onHide, onSubmit, editingGoal }) => {
   const [goalName, setGoalName] = useState("");
-  const [goalFrequency, setGoalFrequency] = useState("");
+  const [goalFrequency, setGoalFrequency] = useState("1x a week");
 
   const [goalNameError, setGoalNameError] = useState(false);
-  const [goalFrequencyError, setGoalFrequencyError] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (show) {
       setGoalName(editingGoal ? editingGoal.name : "");
-      setGoalFrequency(editingGoal ? editingGoal.frequency : "");
+      setGoalFrequency(editingGoal ? editingGoal.frequency : "1x a week");
     }
   }, [show, editingGoal]);
 
@@ -25,17 +24,14 @@ const EditGoalModal = ({ show, onHide, onSubmit, editingGoal }) => {
   const handleSubmit = () => {
     // Reset error states each time the button is clicked
     setGoalNameError(false);
-    setGoalFrequencyError(false);
 
     // Validation checks
     if (!goalName.trim()) {
       setGoalNameError(true); // Set error state for goal name
     }
-    if (!goalFrequency) {
-      setGoalFrequencyError(true); // Set error state for goal frequency
-    }
 
     // If either field is invalid, prevent form submission
+    console.log(goalFrequency);
     if (!goalName.trim() || !goalFrequency) {
       return;
     }
@@ -89,7 +85,6 @@ const EditGoalModal = ({ show, onHide, onSubmit, editingGoal }) => {
             <Form.Select
               value={goalFrequency}
               onChange={(e) => setGoalFrequency(e.target.value)}
-              isInvalid={goalFrequencyError}
             >
               <option value="1x a week">1x a week</option>
               <option value="2x a week">2x a week</option>
@@ -101,11 +96,6 @@ const EditGoalModal = ({ show, onHide, onSubmit, editingGoal }) => {
               <option value="Every Weekday">Every Weekday</option>
               <option value="Every Weekend Day">Every Weekend Day</option>
             </Form.Select>
-            {goalFrequencyError && (
-              <Form.Control.Feedback type="invalid">
-                Please select a frequency.
-              </Form.Control.Feedback>
-            )}
           </Form.Group>
         </Form>
       </Modal.Body>
